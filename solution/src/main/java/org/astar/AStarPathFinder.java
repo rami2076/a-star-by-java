@@ -51,6 +51,42 @@ public class AStarPathFinder {
             Point startPoint,
             Point endPoint,
             Set<Point> closedPoints) {
+
+        if (startPoint.equals(endPoint)) {
+            return List.of(endPoint);
+        }
+
+        int currentX = ((Double) startPoint.getX()).intValue();
+        int currentY = ((Double) startPoint.getY()).intValue();
+
+        if (currentX < 0 || currentX >= width
+                || currentY < 0 || currentY >= height
+                || closedPoints.contains(startPoint)) {
+            return null;
+        }
+
+        closedPoints.add(startPoint);
+
+        var nextPath = findPathRecursively(width, height, new Point(currentX - 1, currentY), endPoint, closedPoints);
+        if (nextPath != null) {
+            return union(startPoint, nextPath);
+        }
+
+        nextPath = findPathRecursively(width, height, new Point(currentX, currentY + 1), endPoint, closedPoints);
+        if (nextPath != null) {
+            return union(startPoint, nextPath);
+        }
+
+        nextPath = findPathRecursively(width, height, new Point(currentX + 1, currentY), endPoint, closedPoints);
+        if (nextPath != null) {
+            return union(startPoint, nextPath);
+        }
+
+        nextPath = findPathRecursively(width, height, new Point(currentX, currentY - 1), endPoint, closedPoints);
+        if (nextPath != null) {
+            return union(startPoint, nextPath);
+        }
+
         return null;
     }
 

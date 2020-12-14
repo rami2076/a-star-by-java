@@ -8,7 +8,7 @@
     <artifactId>AStar-By-Java-Without</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>AStar-By-Java</name>
+    <name>AStar-By-Java-Without</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

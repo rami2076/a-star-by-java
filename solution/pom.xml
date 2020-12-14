@@ -5,10 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.astar</groupId>
-    <artifactId>AStar-By-Java</artifactId>
+    <artifactId>AStar-By-Java-Solution</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <name>AStar-By-Java</name>
+    <name>AStar-By-Java-Solution</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

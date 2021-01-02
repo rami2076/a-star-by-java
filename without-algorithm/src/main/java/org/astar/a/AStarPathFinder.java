@@ -1,4 +1,4 @@
-package org.astar;
+package org.astar.a;
 
 
 import java.awt.Point;

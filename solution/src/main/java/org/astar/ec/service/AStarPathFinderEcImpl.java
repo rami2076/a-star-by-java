@@ -1,14 +1,14 @@
-package org.astar.c.service;
+package org.astar.ec.service;
 
-import org.astar.c.value_object.ChainNodeEc;
-import org.astar.c.value_object.CoordinateEc;
-import org.astar.c.value_object.CoordinateSystemEc;
+import org.astar.ec.value_object.ChainNodeEc;
+import org.astar.ec.value_object.CoordinateEc;
+import org.astar.ec.value_object.CoordinateSystemEc;
 import org.eclipse.collections.api.factory.Sets;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.eclipse.collections.api.set.MutableSet;
 import org.eclipse.collections.impl.list.mutable.FastList;
+import org.eclipse.collections.impl.tuple.Tuples;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -153,12 +153,12 @@ public class AStarPathFinderEcImpl {
         final var previousNode = Optional.of(centerNode);
 
         final var aroundPoints = FastList.newListWith(
-                Map.entry(center.left(), this.coordinateSystemEc.isValidLeft()),
-                Map.entry(center.up(), this.coordinateSystemEc.isValidUp()),
-                Map.entry(center.right(), this.coordinateSystemEc.isValidRight()),
-                Map.entry(center.down(), this.coordinateSystemEc.isValidDown())
+                Tuples.pair(center.left(), this.coordinateSystemEc.isValidLeft()),
+                Tuples.pair(center.up(), this.coordinateSystemEc.isValidUp()),
+                Tuples.pair(center.right(), this.coordinateSystemEc.isValidRight()),
+                Tuples.pair(center.down(), this.coordinateSystemEc.isValidDown())
         );
-        aroundPoints.forEach(e -> divergeIf(e.getKey(), previousNode, e.getValue()));
+        aroundPoints.forEach(e -> divergeIf(e.getOne(), previousNode, e.getTwo()));
 
     }
 

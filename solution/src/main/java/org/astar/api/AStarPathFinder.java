@@ -1,6 +1,6 @@
 package org.astar.api;
 
-import org.astar.a.value_object.Coordinate;
+import org.astar.vo.value_object.Coordinate;
 
 import java.util.List;
 import java.util.Optional;

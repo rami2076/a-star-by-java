@@ -1,8 +1,8 @@
-package org.astar.a.service;
+package org.astar.vo.service;
 
-import org.astar.a.value_object.ChainNode;
-import org.astar.a.value_object.Coordinate;
-import org.astar.a.value_object.CoordinateSystem;
+import org.astar.vo.value_object.ChainNode;
+import org.astar.vo.value_object.Coordinate;
+import org.astar.vo.value_object.CoordinateSystem;
 import org.astar.api.AStarPathFinder;
 
 import java.util.*;

@@ -1,20 +1,20 @@
-package org.astar.c;
+package org.astar.vo;
 
 
-import org.astar.c.service.AStarPathFinderEcImpl;
-import org.astar.c.value_object.CoordinateEc;
-import org.eclipse.collections.api.set.ImmutableSet;
-import org.eclipse.collections.impl.factory.Sets;
+import org.astar.api.AStarPathFinder;
+import org.astar.vo.service.AStarPathFinderImpl;
+import org.astar.vo.value_object.Coordinate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * AStarPathFinderのTestクラス
  */
-public class AStarPathFinderEcTest {
+public class AStarPathFinderTest {
 
     /**
      * 5x5の障害物なしの区域でのテスト
@@ -24,8 +24,8 @@ public class AStarPathFinderEcTest {
     public void Size5x5_WithoutObstacles() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(0, 0);
-        var goalPoint = new CoordinateEc(4, 4);
+        var startPoint = new Coordinate(0, 0);
+        var goalPoint = new Coordinate(4, 4);
 
         final int expectedPathLength = 9;
 
@@ -40,8 +40,8 @@ public class AStarPathFinderEcTest {
     public void Size5x5_WithoutObstacles_Reverse() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(4, 4);
-        var goalPoint = new CoordinateEc(0, 0);
+        var startPoint = new Coordinate(4, 4);
+        var goalPoint = new Coordinate(0, 0);
 
         final int expectedPathLength = 9;
 
@@ -56,12 +56,12 @@ public class AStarPathFinderEcTest {
     public void Size5x5_WithObstacles() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(0, 0);
-        var goalPoint = new CoordinateEc(4, 4);
-        var obstacles = Sets.immutable.of(
-                new CoordinateEc(2, 3),
-                new CoordinateEc(2, 4),
-                new CoordinateEc(4, 3)
+        var startPoint = new Coordinate(0, 0);
+        var goalPoint = new Coordinate(4, 4);
+        var obstacles = Set.of(
+                new Coordinate(2, 3),
+                new Coordinate(2, 4),
+                new Coordinate(4, 3)
         );
 
         final int expectedPathLength = 9;
@@ -77,14 +77,14 @@ public class AStarPathFinderEcTest {
     public void Size5x5_WithObstacles_() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(0, 0);
-        var goalPoint = new CoordinateEc(4, 4);
-        var obstacles = Sets.immutable.of(
-                new CoordinateEc(0, 2),
-                new CoordinateEc(1, 2),
-                new CoordinateEc(2, 2),
-                new CoordinateEc(3, 2),
-                new CoordinateEc(3, 1)
+        var startPoint = new Coordinate(0, 0);
+        var goalPoint = new Coordinate(4, 4);
+        var obstacles = Set.of(
+                new Coordinate(0, 2),
+                new Coordinate(1, 2),
+                new Coordinate(2, 2),
+                new Coordinate(3, 2),
+                new Coordinate(3, 1)
         );
 
         final int expectedPathLength = 9;
@@ -100,17 +100,17 @@ public class AStarPathFinderEcTest {
     public void Size5x5_WithObstacles__() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(0, 0);
-        var goalPoint = new CoordinateEc(4, 4);
-        var obstacles = Sets.immutable.of(
-                new CoordinateEc(0, 1),
-                new CoordinateEc(1, 1),
-                new CoordinateEc(2, 1),
-                new CoordinateEc(3, 1),
-                new CoordinateEc(1, 3),
-                new CoordinateEc(2, 3),
-                new CoordinateEc(3, 3),
-                new CoordinateEc(4, 3)
+        var startPoint = new Coordinate(0, 0);
+        var goalPoint = new Coordinate(4, 4);
+        var obstacles = Set.of(
+                new Coordinate(0, 1),
+                new Coordinate(1, 1),
+                new Coordinate(2, 1),
+                new Coordinate(3, 1),
+                new Coordinate(1, 3),
+                new Coordinate(2, 3),
+                new Coordinate(3, 3),
+                new Coordinate(4, 3)
         );
 
         final int expectedPathLength = 17;
@@ -126,18 +126,18 @@ public class AStarPathFinderEcTest {
     public void Size5x5_WithObstacles___() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(0, 0);
-        var goalPoint = new CoordinateEc(4, 4);
-        var obstacles = Sets.immutable.of(
-                new CoordinateEc(0, 1),
-                new CoordinateEc(1, 1),
+        var startPoint = new Coordinate(0, 0);
+        var goalPoint = new Coordinate(4, 4);
+        var obstacles = Set.of(
+                new Coordinate(0, 1),
+                new Coordinate(1, 1),
                 //new Coordinate(2, 1),
-                new CoordinateEc(3, 1),
-                new CoordinateEc(4, 1),
-                new CoordinateEc(1, 3),
-                new CoordinateEc(2, 3),
-                new CoordinateEc(3, 3),
-                new CoordinateEc(4, 3)
+                new Coordinate(3, 1),
+                new Coordinate(4, 1),
+                new Coordinate(1, 3),
+                new Coordinate(2, 3),
+                new Coordinate(3, 3),
+                new Coordinate(4, 3)
         );
 
         final int expectedPathLength = 13;
@@ -154,12 +154,12 @@ public class AStarPathFinderEcTest {
     public void Size5x5_NoAccess() {
         var width = 5;
         var height = 5;
-        var startPoint = new CoordinateEc(0, 0);
-        var goalPoint = new CoordinateEc(4, 4);
-        var obstacles = Sets.immutable.of(
-                new CoordinateEc(3, 3),
-                new CoordinateEc(3, 4),
-                new CoordinateEc(4, 3)
+        var startPoint = new Coordinate(0, 0);
+        var goalPoint = new Coordinate(4, 4);
+        var obstacles = Set.of(
+                new Coordinate(3, 3),
+                new Coordinate(3, 4),
+                new Coordinate(4, 3)
         );
 
         final int expectedPathLength = 0;
@@ -181,15 +181,15 @@ public class AStarPathFinderEcTest {
     private static void pathFinderTest(
             int width,
             int height,
-            CoordinateEc startPoint,
-            CoordinateEc goalPoint,
-            ImmutableSet<CoordinateEc> obstacles,
+            Coordinate startPoint,
+            Coordinate goalPoint,
+            Set<Coordinate> obstacles,
             int expectedPathLength) {
-        CoordinateEc[] path = null;
+        Coordinate[] path = null;
         try {
-            AStarPathFinderEcImpl finder = new AStarPathFinderEcImpl();
+            AStarPathFinder finder = new AStarPathFinderImpl();
             path = finder.findPath(width, height, startPoint, goalPoint, Optional.ofNullable(obstacles))
-                    .map(e -> e.toArray(CoordinateEc[]::new))
+                    .map(e -> e.toArray(Coordinate[]::new))
                     .orElse(null);
         } catch (Exception e) {
             e.printStackTrace();

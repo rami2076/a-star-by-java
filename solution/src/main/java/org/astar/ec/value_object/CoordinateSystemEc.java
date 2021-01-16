@@ -1,4 +1,4 @@
-package org.astar.c.value_object;
+package org.astar.ec.value_object;
 
 import org.eclipse.collections.api.set.ImmutableSet;
 

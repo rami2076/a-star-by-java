@@ -1,4 +1,4 @@
-package org.astar.b.value_object;
+package org.astar.normal.value_object;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
  * A Star用のPosition
  */
 @Getter
-public class ChainNode_b implements Comparable<ChainNode_b> {
+public class ChainNodeNormal implements Comparable<ChainNodeNormal> {
 
     // g(n) はスタートノードからnまでの最小コスト
     // h(n) はn からゴールノードまでの最小コストである。
@@ -23,7 +23,7 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
     /**
      * 　一つ前の要素
      */
-    private Optional<ChainNode_b> previousNode;
+    private Optional<ChainNodeNormal> previousNode;
     /**
      * 　スタートノードからnまでの推定最小コスト g(n)
      */
@@ -48,7 +48,7 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
      * @param cost
      * @param distance
      */
-    private ChainNode_b(Point point, Optional<ChainNode_b> previousNode, Integer cost, int distance) {
+    private ChainNodeNormal(Point point, Optional<ChainNodeNormal> previousNode, Integer cost, int distance) {
         this.point = point;
         this.previousNode = previousNode;
         this.cost = Objects.isNull(cost) ? 0 : cost;
@@ -68,9 +68,9 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
             return false;
         }
 
-        ChainNode_b other;
-        if (o instanceof ChainNode_b) {
-            other = (ChainNode_b) o;
+        ChainNodeNormal other;
+        if (o instanceof ChainNodeNormal) {
+            other = (ChainNodeNormal) o;
         } else {
             return false;
         }
@@ -85,7 +85,7 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
      * @param other
      * @return
      */
-    public boolean equalsCoordinate(ChainNode_b other) {
+    public boolean equalsCoordinate(ChainNodeNormal other) {
 
         return this.point.equals(other.point);
 
@@ -124,13 +124,13 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
      * @param endPoint
      * @return
      */
-    public static ChainNode_b newNode(Point point, Optional<ChainNode_b> previousNode, Point endPoint) {
+    public static ChainNodeNormal newNode(Point point, Optional<ChainNodeNormal> previousNode, Point endPoint) {
 
-        int cost = previousNode.map(ChainNode_b::getCost).orElse(0) + 1;//前の位置から1だけ離れているので+1している。
+        int cost = previousNode.map(ChainNodeNormal::getCost).orElse(0) + 1;//前の位置から1だけ離れているので+1している。
         int distance = calculateDistance(point, endPoint);
 
         //次の計算対象の位置を取得
-        var currentNode = new ChainNode_b(
+        var currentNode = new ChainNodeNormal(
                 point,
                 previousNode,
                 cost,
@@ -144,14 +144,14 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
      * @param other
      * @return
      */
-    public boolean lessThanTotalCost(ChainNode_b other) {
+    public boolean lessThanTotalCost(ChainNodeNormal other) {
         return this.totalLength() < other.totalLength();
     }
 
     /**
      * @param other
      */
-    public void update(ChainNode_b other) {
+    public void update(ChainNodeNormal other) {
         this.cost = other.cost;
         this.distance = other.distance;
         this.previousNode = other.previousNode;
@@ -162,7 +162,7 @@ public class ChainNode_b implements Comparable<ChainNode_b> {
      * @return
      */
     @Override
-    public int compareTo(ChainNode_b other) {
+    public int compareTo(ChainNodeNormal other) {
         return this.totalLength().compareTo(other.totalLength());
     }
 

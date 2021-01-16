@@ -1,4 +1,4 @@
-package org.astar.a.value_object;
+package org.astar.vo.value_object;
 
 
 import java.util.function.Supplier;

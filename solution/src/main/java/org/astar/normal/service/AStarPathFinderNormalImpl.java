@@ -1,7 +1,7 @@
-package org.astar.b.service;
+package org.astar.normal.service;
 
-import org.astar.b.value_object.ChainNode_b;
-import org.astar.b.value_object.Parameter;
+import org.astar.normal.value_object.ChainNodeNormal;
+import org.astar.normal.value_object.Parameter;
 
 import java.awt.*;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * A star path finder.
  */
-public class AStarPathFinderImpl_b {
+public class AStarPathFinderNormalImpl {
 
     /**
      * 探索時のパラメータ
@@ -20,12 +20,12 @@ public class AStarPathFinderImpl_b {
     /**
      * 計算中のノードを格納したリスト
      */
-    private Set<ChainNode_b> openSet = new HashSet<>();
+    private Set<ChainNodeNormal> openSet = new HashSet<>();
 
     /**
      * 暫定の計算済みのノードを格納したリスト
      */
-    private Set<ChainNode_b> provisionalCloseSet = new HashSet<>();
+    private Set<ChainNodeNormal> provisionalCloseSet = new HashSet<>();
 
     /**
      * 起点から終点までの最短経路を再帰的に探索する
@@ -52,7 +52,7 @@ public class AStarPathFinderImpl_b {
         this.parameter = new Parameter(width, height, startPoint, endPoint, concreteObstacles);
 
         //1巡目
-        ChainNode_b newNode = newNode(startPoint, Optional.empty());
+        ChainNodeNormal newNode = newNode(startPoint, Optional.empty());
         addOpenList(newNode);
 
         //2巡目以降
@@ -65,10 +65,10 @@ public class AStarPathFinderImpl_b {
      *
      * @param newNode
      */
-    private void addOpenList(ChainNode_b newNode) {
+    private void addOpenList(ChainNodeNormal newNode) {
 
         //新しいnodeが計残済みリストに含まれる場合,
-        Optional<ChainNode_b> closeOldNode = this.provisionalCloseSet.stream()
+        Optional<ChainNodeNormal> closeOldNode = this.provisionalCloseSet.stream()
                 .filter(position -> position.equals(newNode))
                 .findFirst();
 
@@ -82,7 +82,7 @@ public class AStarPathFinderImpl_b {
         }
 
         //計算中Nodeに存在するか？
-        Optional<ChainNode_b> openOldNode = this.openSet.stream()
+        Optional<ChainNodeNormal> openOldNode = this.openSet.stream()
                 .filter(position -> position.equals(newNode))
                 .findFirst();
         if (openOldNode.isPresent()) {
@@ -104,7 +104,7 @@ public class AStarPathFinderImpl_b {
     private List<Point> findPath() {
 
 
-        ChainNode_b currentNode = null;
+        ChainNodeNormal currentNode = null;
         while (this.openSet.size() != 0
                 && !this.provisionalCloseSet.stream()
                 .anyMatch(node -> node.getPoint().equals(this.parameter.endPoint()))) {
@@ -136,7 +136,7 @@ public class AStarPathFinderImpl_b {
     /**
      * OpenList内の最短コストののNodeを取得
      */
-    private ChainNode_b calculateMinLengthPosition() {
+    private ChainNodeNormal calculateMinLengthPosition() {
         var minLengthPosition = this.openSet.stream().findFirst().get();
         int minLength = minLengthPosition.totalLength();
         for (var openPoint : this.openSet) {
@@ -154,31 +154,31 @@ public class AStarPathFinderImpl_b {
      *
      * @param ChainNode_b
      */
-    private void openSurroundingPoints(ChainNode_b ChainNode_b) {
+    private void openSurroundingPoints(ChainNodeNormal ChainNode_b) {
         int targetPointX = ChainNode_b.getPoint().x;
         int targetPointY = ChainNode_b.getPoint().y;
 
         var nextPoint = new Point(targetPointX - 1, targetPointY);
         if (targetPointX > 0 && !this.parameter.obstacles().contains(nextPoint)) {
-            ChainNode_b newNode = newNode(nextPoint, Optional.of(ChainNode_b));
+            ChainNodeNormal newNode = newNode(nextPoint, Optional.of(ChainNode_b));
             addOpenList(newNode);
         }
 
         nextPoint = new Point(targetPointX, targetPointY + 1);
         if (targetPointY < this.parameter.height() - 1 && !this.parameter.obstacles().contains(nextPoint)) {
-            ChainNode_b newNode = newNode(nextPoint, Optional.of(ChainNode_b));
+            ChainNodeNormal newNode = newNode(nextPoint, Optional.of(ChainNode_b));
             addOpenList(newNode);
         }
 
         nextPoint = new Point(targetPointX + 1, targetPointY);
         if (targetPointX < this.parameter.width() - 1 && !this.parameter.obstacles().contains(nextPoint)) {
-            ChainNode_b newNode = newNode(nextPoint, Optional.of(ChainNode_b));
+            ChainNodeNormal newNode = newNode(nextPoint, Optional.of(ChainNode_b));
             addOpenList(newNode);
         }
 
         nextPoint = new Point(targetPointX, targetPointY - 1);
         if (targetPointY > 0 && !this.parameter.obstacles().contains(nextPoint)) {
-            ChainNode_b newNode = newNode(nextPoint, Optional.of(ChainNode_b));
+            ChainNodeNormal newNode = newNode(nextPoint, Optional.of(ChainNode_b));
             addOpenList(newNode);
         }
     }
@@ -190,7 +190,7 @@ public class AStarPathFinderImpl_b {
      * @param previousNode
      * @return
      */
-    private ChainNode_b newNode(Point currentPoint, Optional<ChainNode_b> previousNode) {
-        return ChainNode_b.newNode(currentPoint, previousNode, this.parameter.endPoint());
+    private ChainNodeNormal newNode(Point currentPoint, Optional<ChainNodeNormal> previousNode) {
+        return ChainNodeNormal.newNode(currentPoint, previousNode, this.parameter.endPoint());
     }
 }

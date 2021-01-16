@@ -1,8 +1,8 @@
 package org.astar.c;
 
 
-import org.astar.a.c.service.AStarPathFinderEcImpl;
-import org.astar.a.c.value_object.CoordinateEc;
+import org.astar.c.service.AStarPathFinderEcImpl;
+import org.astar.c.value_object.CoordinateEc;
 import org.eclipse.collections.api.set.ImmutableSet;
 import org.eclipse.collections.impl.factory.Sets;
 import org.junit.jupiter.api.Assertions;

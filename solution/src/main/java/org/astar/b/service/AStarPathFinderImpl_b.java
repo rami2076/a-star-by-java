@@ -1,7 +1,7 @@
-package org.astar.a.b.service;
+package org.astar.b.service;
 
-import org.astar.a.b.value_object.ChainNode_b;
-import org.astar.a.b.value_object.Parameter;
+import org.astar.b.value_object.ChainNode_b;
+import org.astar.b.value_object.Parameter;
 
 import java.awt.*;
 import java.util.List;
@@ -105,7 +105,9 @@ public class AStarPathFinderImpl_b {
 
 
         ChainNode_b currentNode = null;
-        while (isContinue()) {
+        while (this.openSet.size() != 0
+                && !this.provisionalCloseSet.stream()
+                .anyMatch(node -> node.getPoint().equals(this.parameter.endPoint()))) {
             currentNode = calculateMinLengthPosition();
             this.provisionalCloseSet.add(currentNode);
             this.openSet.remove(currentNode);
@@ -113,7 +115,9 @@ public class AStarPathFinderImpl_b {
         }
 
 
-        if (isUnreachableGoal(currentNode)) {
+        if (Objects.isNull(currentNode)
+                || !this.provisionalCloseSet.stream()
+                .anyMatch(node -> node.getPoint().equals(this.parameter.endPoint()))) {
             return null;
         } else {
             var path = new ArrayList<Point>();
@@ -128,7 +132,6 @@ public class AStarPathFinderImpl_b {
         }
 
     }
-
 
     /**
      * OpenList内の最短コストののNodeを取得
@@ -178,31 +181,6 @@ public class AStarPathFinderImpl_b {
             ChainNode_b newNode = newNode(nextPoint, Optional.of(ChainNode_b));
             addOpenList(newNode);
         }
-    }
-
-
-    /**
-     * 探索継続か？
-     *
-     * @return
-     */
-    private boolean isContinue() {
-        return this.openSet.size() != 0
-                && !this.provisionalCloseSet.stream()
-                .anyMatch(node -> node.getPoint().equals(this.parameter.endPoint()));
-
-    }
-
-    /**
-     * 目標に到達可能か?
-     *
-     * @param ChainNode_b
-     * @return
-     */
-    private boolean isUnreachableGoal(ChainNode_b ChainNode_b) {
-        return Objects.isNull(ChainNode_b)
-                || !this.provisionalCloseSet.stream()
-                .anyMatch(node -> node.getPoint().equals(this.parameter.endPoint()));
     }
 
     /**

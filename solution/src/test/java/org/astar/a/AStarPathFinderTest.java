@@ -1,9 +1,9 @@
 package org.astar.a;
 
 
-import org.astar.a.api.AStarPathFinder;
-import org.astar.a.a.service.AStarPathFinderImpl;
-import org.astar.a.a.value_object.Coordinate;
+import org.astar.api.AStarPathFinder;
+import org.astar.a.service.AStarPathFinderImpl;
+import org.astar.a.value_object.Coordinate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

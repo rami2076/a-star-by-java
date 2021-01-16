@@ -1,33 +1,37 @@
-package org.astar.a.a.service;
+package org.astar.c.service;
 
-import org.astar.a.a.value_object.ChainNode;
-import org.astar.a.a.value_object.Coordinate;
-import org.astar.a.a.value_object.CoordinateSystem;
-import org.astar.a.api.AStarPathFinder;
+import org.astar.c.value_object.ChainNodeEc;
+import org.astar.c.value_object.CoordinateEc;
+import org.astar.c.value_object.CoordinateSystemEc;
+import org.eclipse.collections.api.factory.Sets;
+import org.eclipse.collections.api.set.ImmutableSet;
+import org.eclipse.collections.api.set.MutableSet;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * A star path finder.
  */
-public class AStarPathFinderImpl implements AStarPathFinder {
+public class AStarPathFinderEcImpl {
 
     /**
      * 座標系
      */
-    private CoordinateSystem coordinateSystem;
+    private CoordinateSystemEc coordinateSystemEc;
 
     /**
      * 暫定的に探索済みの最短経路で無いと判定された経路(Node)を格納したリスト
      */
-    private Set<ChainNode> provisionalOpenSet = new HashSet<>();
+    private MutableSet<ChainNodeEc> provisionalOpenSet = Sets.mutable.of();
 
     /**
      * 暫定的に最短経路であると評価された経路(Node)を格納したリスト
      */
-    private Set<ChainNode> provisionalCloseSet = new HashSet<>();
+    private MutableSet<ChainNodeEc> provisionalCloseSet = Sets.mutable.of();
 
     /**
      * 起点から終点までの最短経路を探索する
@@ -36,28 +40,27 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      * 経路が存在しない場合nullを返却.
      * </p>
      *
-     * @param width           　最大幅
-     * @param height          　最大高さ
-     * @param startCoordinate 　起点
-     * @param goalCoordinate  　終点
-     * @param obstacles       　障害物の位置の一覧
+     * @param width             　最大幅
+     * @param height            　最大高さ
+     * @param startCoordinateEc 　起点
+     * @param goalCoordinateEc  　終点
+     * @param obstacles         　障害物の位置の一覧
      * @return 起点から終点までの経路
      */
-    @Override
-    public Optional<List<Coordinate>> findPath(
+    public Optional<FastList<CoordinateEc>> findPath(
             int width,
             int height,
-            Coordinate startCoordinate,
-            Coordinate goalCoordinate,
-            Optional<Set<Coordinate>> obstacles) {
+            CoordinateEc startCoordinateEc,
+            CoordinateEc goalCoordinateEc,
+            Optional<ImmutableSet<CoordinateEc>> obstacles) {
 
-        Set<Coordinate> concreteObstacles = obstacles.orElseGet(Collections::emptySet);
-        this.coordinateSystem = new CoordinateSystem(width, height, startCoordinate, goalCoordinate, concreteObstacles);
+        ImmutableSet<CoordinateEc> concreteObstacles = obstacles.orElseGet(Sets.immutable::empty);
+        this.coordinateSystemEc = new CoordinateSystemEc(width, height, startCoordinateEc, goalCoordinateEc, concreteObstacles);
 
         //発散
-        diverge(startCoordinate, Optional.empty());
+        diverge(startCoordinateEc, Optional.empty());
 
-        List<Coordinate> result = findPath();
+        FastList<CoordinateEc> result = findPath();
         return Optional.ofNullable(result);
     }
 
@@ -66,9 +69,9 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      *
      * @return
      */
-    private List<Coordinate> findPath() {
+    private FastList<CoordinateEc> findPath() {
 
-        ChainNode shortestNode = null;
+        ChainNodeEc shortestNode = null;
         while (isContinue()) {
             //最短経路の収束
             shortestNode = converge();
@@ -79,14 +82,14 @@ public class AStarPathFinderImpl implements AStarPathFinder {
         if (isUnreachableGoal(shortestNode)) {
             return null;
         } else {
-            var path = new ArrayList<Coordinate>();
-            path.add(shortestNode.getCoordinate());
+            var path = new FastList<CoordinateEc>();
+            path.add(shortestNode.getCoordinateEc());
             while (shortestNode.getPreviousNode().isPresent()) {
                 shortestNode = shortestNode.getPreviousNode().get();
-                path.add(shortestNode.getCoordinate());
+                path.add(shortestNode.getCoordinateEc());
             }
-            Collections.reverse(path);
-            return path;
+
+            return path.reverseThis();
         }
 
     }
@@ -99,21 +102,21 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      */
     private boolean isContinue() {
         return this.provisionalOpenSet.size() != 0
-                && !this.provisionalCloseSet.stream()
-                .anyMatch(node -> this.coordinateSystem.isGoal(node.getCoordinate()));
+                && !this.provisionalCloseSet
+                .anySatisfy(node -> this.coordinateSystemEc.isGoal(node.getCoordinateEc()));
     }
 
     /**
      * 目標地点に到達しないか？
      *
-     * @param chainNode
+     * @param chainNodeEc
      * @return true:到達しない場合
      * false:到達する場合
      */
-    private boolean isUnreachableGoal(ChainNode chainNode) {
-        return Objects.isNull(chainNode)
-                || !this.provisionalCloseSet.stream()
-                .anyMatch(node -> this.coordinateSystem.isGoal(node.getCoordinate()));
+    private boolean isUnreachableGoal(ChainNodeEc chainNodeEc) {
+        return Objects.isNull(chainNodeEc)
+                || !this.provisionalCloseSet
+                .anySatisfy(node -> this.coordinateSystemEc.isGoal(node.getCoordinateEc()));
     }
 
     /**
@@ -121,9 +124,9 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      *
      * @return 推定最短経路を保持するノード
      */
-    private ChainNode converge() {
+    private ChainNodeEc converge() {
         //最小ノードを取得
-        ChainNode shortestNode = findShortestChainNodeInOpenList();
+        ChainNodeEc shortestNode = findShortestChainNodeInOpenList();
         this.provisionalCloseSet.add(shortestNode);
         this.provisionalOpenSet.remove(shortestNode);
         return shortestNode;
@@ -134,10 +137,9 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      *
      * @return 最短経路を返却
      */
-    private ChainNode findShortestChainNodeInOpenList() {
-        return this.provisionalOpenSet.stream()
-                .min(ChainNode::compareTo)
-                .get();
+    private ChainNodeEc findShortestChainNodeInOpenList() {
+        return this.provisionalOpenSet
+                .min(ChainNodeEc::compareTo);
     }
 
     /**
@@ -145,16 +147,16 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      *
      * @param centerNode 発散時に中央に存在する座標を持つNode
      */
-    private void divergeAroundWith(ChainNode centerNode) {
-        final Coordinate center = centerNode.getCoordinate();
+    private void divergeAroundWith(ChainNodeEc centerNode) {
+        final CoordinateEc center = centerNode.getCoordinateEc();
 
         final var previousNode = Optional.of(centerNode);
 
-        final var aroundPoints = Stream.of(
-                Map.entry(center.left(), this.coordinateSystem.isValidLeft()),
-                Map.entry(center.up(), this.coordinateSystem.isValidUp()),
-                Map.entry(center.right(), this.coordinateSystem.isValidRight()),
-                Map.entry(center.down(), this.coordinateSystem.isValidDown())
+        final var aroundPoints = FastList.newListWith(
+                Map.entry(center.left(), this.coordinateSystemEc.isValidLeft()),
+                Map.entry(center.up(), this.coordinateSystemEc.isValidUp()),
+                Map.entry(center.right(), this.coordinateSystemEc.isValidRight()),
+                Map.entry(center.down(), this.coordinateSystemEc.isValidDown())
         );
         aroundPoints.forEach(e -> divergeIf(e.getKey(), previousNode, e.getValue()));
 
@@ -163,25 +165,25 @@ public class AStarPathFinderImpl implements AStarPathFinder {
     /**
      * 妥当性のある座標の場合、経路の発散処理を行う
      *
-     * @param coordinate        座標
+     * @param coordinateEc      座標
      * @param previousNode      一つ前のNode
      * @param isValidCoordinate 座標の妥当性を判定する関数
      */
-    private void divergeIf(Coordinate coordinate, Optional<ChainNode> previousNode, Predicate<Coordinate> isValidCoordinate) {
-        if (isValidCoordinate.test(coordinate)) {
-            diverge(coordinate, previousNode);
+    private void divergeIf(CoordinateEc coordinateEc, Optional<ChainNodeEc> previousNode, Predicate<CoordinateEc> isValidCoordinate) {
+        if (isValidCoordinate.test(coordinateEc)) {
+            diverge(coordinateEc, previousNode);
         }
     }
 
     /**
      * 新規Node(経路)のコストが新規または、探索済みの同じ座標を持つNode(経路)より総コストが低い場合、経路をOpenSetに追加し、経路を発散させる。
      *
-     * @param processCoordinate 処理中の座標
-     * @param previousNode      一つ前のNode
+     * @param processCoordinateEc 処理中の座標
+     * @param previousNode        一つ前のNode
      */
-    private void diverge(Coordinate processCoordinate, Optional<ChainNode> previousNode) {
+    private void diverge(CoordinateEc processCoordinateEc, Optional<ChainNodeEc> previousNode) {
         //新しいNodeのコスト計算
-        ChainNode newNode = newNode(processCoordinate, previousNode);
+        ChainNodeEc newNode = newNode(processCoordinateEc, previousNode);
         //計算済みのNodeの方より新しくコスト算出したノードの方がコストが低いか判定
         if (absentsAfterRemoveIfInCloseList(newNode)) {
             //新しいNodeをOpenリストに追加
@@ -196,8 +198,8 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      * @param previousNode       一つ前のNode
      * @return 重みづけされた新規Node
      */
-    private ChainNode newNode(Coordinate currentCoordinates, Optional<ChainNode> previousNode) {
-        return ChainNode.newNode(currentCoordinates, previousNode, this.coordinateSystem);
+    private ChainNodeEc newNode(CoordinateEc currentCoordinates, Optional<ChainNodeEc> previousNode) {
+        return ChainNodeEc.newNode(currentCoordinates, previousNode, this.coordinateSystemEc);
     }
 
     /**
@@ -214,14 +216,13 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      * false:新規Nodeのheadの座標が暫定最短経路一覧内のheadの座標と同じ場合に既存Nodeの総コストが低い場合、既存のNodeを一覧から削除しない。
      * </p>
      */
-    private boolean absentsAfterRemoveIfInCloseList(ChainNode newNode) {
+    private boolean absentsAfterRemoveIfInCloseList(ChainNodeEc newNode) {
 
         //新規Nodeと同じ座標の計算済みNodeの最短経路のコストが新規Nodeより大きい場合リストから削除
-        this.provisionalCloseSet.stream()
-                .filter(node -> node.equalsCoordinate(newNode))
-                .filter(node -> newNode.lessThanTotalCost(node))
-                .findFirst()
-                .ifPresent(oldNode -> this.provisionalCloseSet.remove(oldNode));
+        this.provisionalCloseSet
+                .select(node -> node.equalsCoordinate(newNode))
+                .removeIf(node -> newNode.lessThanTotalCost(node));
+
         //計算済みNode内の方が最短経路のコストが小さい場合
         if (this.provisionalCloseSet.contains(newNode)) {
             return false;
@@ -240,10 +241,9 @@ public class AStarPathFinderImpl implements AStarPathFinder {
      *
      * @param newNode 新規Node
      */
-    private void addOrUpdateInOpenList(ChainNode newNode) {
-        this.provisionalOpenSet.stream()
-                .filter(node -> node.equalsCoordinate(newNode))
-                .findFirst()
+    private void addOrUpdateInOpenList(ChainNodeEc newNode) {
+        this.provisionalOpenSet
+                .detectOptional(node -> node.equalsCoordinate(newNode))
                 .ifPresentOrElse(
                         oldNode -> {
                             if (newNode.lessThanTotalCost(oldNode)) {
@@ -253,5 +253,4 @@ public class AStarPathFinderImpl implements AStarPathFinder {
                         () -> this.provisionalOpenSet.add(newNode)
                 );
     }
-
 }

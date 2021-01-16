@@ -1,4 +1,4 @@
-package org.astar.a.b.value_object;
+package org.astar.b.value_object;
 
 import java.awt.*;
 import java.util.Set;

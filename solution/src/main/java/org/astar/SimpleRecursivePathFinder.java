@@ -1,4 +1,4 @@
-package org.astar.a;
+package org.astar;
 
 
 import java.awt.*;

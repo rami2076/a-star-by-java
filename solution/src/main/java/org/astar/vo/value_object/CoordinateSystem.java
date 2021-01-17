@@ -113,16 +113,6 @@ public record CoordinateSystem(int width, int height, Coordinate startCoordinate
     }
 
     /**
-     * 引数で指定された地点からスタート地点までの障害物を考慮しない推定最小コストを求める
-     *
-     * @param coordinate
-     * @return
-     */
-    public int g(Coordinate coordinate) {
-        return calculateDistance(coordinate, this.startCoordinate());
-    }
-
-    /**
      * 引数で指定された地点からゴール地点までの障害物を考慮しない推定最小コストを求める
      *
      * @param coordinate

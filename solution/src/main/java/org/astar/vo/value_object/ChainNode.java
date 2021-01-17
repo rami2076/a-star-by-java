@@ -67,7 +67,6 @@ public class ChainNode {
      */
     @Override
     public boolean equals(Object o) {
-
         if (Objects.isNull(o)) {
             return false;
         }
@@ -80,7 +79,6 @@ public class ChainNode {
         }
 
         return this.coordinate.equals(other.coordinate);
-
     }
 
     /**
@@ -91,9 +89,7 @@ public class ChainNode {
      * false:{link #coordinate}が異なる場合
      */
     public boolean equalsCoordinate(ChainNode other) {
-
         return this.coordinate.equals(other.coordinate);
-
     }
 
     /**
@@ -153,7 +149,6 @@ public class ChainNode {
      * @return 新しい重み付きのNode
      */
     public static ChainNode newNode(Coordinate coordinate, Optional<ChainNode> previousNode, CoordinateSystem coordinateSystem) {
-
         int cost = g(previousNode);
         int distance = coordinateSystem.h(coordinate);
 

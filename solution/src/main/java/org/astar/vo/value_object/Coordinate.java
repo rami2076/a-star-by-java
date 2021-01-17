@@ -64,7 +64,7 @@ public record Coordinate(int x, int y) {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Coordinate) {
-            Coordinate coordinate = (Coordinate) obj;
+            var coordinate = (Coordinate) obj;
             return (x == coordinate.x) && (y == coordinate.y);
         }
         return false;

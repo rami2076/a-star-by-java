@@ -222,12 +222,7 @@ public class AStarPathFinderImpl implements AStarPathFinder {
                 .filter(node -> newNode.lessThanTotalCost(node))
                 .findFirst()
                 .ifPresent(oldNode -> this.provisionalCloseSet.remove(oldNode));
-        //計算済みNode内の方が最短経路のコストが小さい場合
-        if (this.provisionalCloseSet.contains(newNode)) {
-            return false;
-        } else {
-            return true;
-        }
+        return !this.provisionalCloseSet.contains(newNode);
     }
 
     /**

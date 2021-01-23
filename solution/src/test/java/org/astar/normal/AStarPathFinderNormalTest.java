@@ -1,6 +1,7 @@
-package org.astar;
+package org.astar.normal;
 
 
+import org.astar.normal.service.AStarPathFinderNormalImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,7 @@ import java.util.Set;
 /**
  * AStarPathFinderのTestクラス
  */
-
-public class AStarPathFinderTest {
+public class AStarPathFinderNormalTest {
 
     /**
      * 5x5の障害物なしの区域でのテスト
@@ -23,11 +23,12 @@ public class AStarPathFinderTest {
     public void Size5x5_WithoutObstacles() {
         var width = 5;
         var height = 5;
-        Point startPoint = new Point(0, 0), endPoint = new Point(4, 4);
+        var startPoint = new Point(0, 0);
+        var goalPoint = new Point(4, 4);
 
         final int expectedPathLength = 9;
 
-        pathFinderTest(width, height, startPoint, endPoint, null, expectedPathLength);
+        pathFinderTest(width, height, startPoint, goalPoint, null, expectedPathLength);
     }
 
     /**
@@ -38,11 +39,12 @@ public class AStarPathFinderTest {
     public void Size5x5_WithoutObstacles_Reverse() {
         var width = 5;
         var height = 5;
-        Point startPoint = new Point(4, 4), endPoint = new Point(0, 0);
+        var startPoint = new Point(4, 4);
+        var goalPoint = new Point(0, 0);
 
         final int expectedPathLength = 9;
 
-        pathFinderTest(width, height, startPoint, endPoint, null, expectedPathLength);
+        pathFinderTest(width, height, startPoint, goalPoint, null, expectedPathLength);
     }
 
     /**
@@ -53,7 +55,8 @@ public class AStarPathFinderTest {
     public void Size5x5_WithObstacles() {
         var width = 5;
         var height = 5;
-        Point startPoint = new Point(0, 0), endPoint = new Point(4, 4);
+        var startPoint = new Point(0, 0);
+        var goalPoint = new Point(4, 4);
         var obstacles = Set.of(
                 new Point(2, 3),
                 new Point(2, 4),
@@ -62,8 +65,85 @@ public class AStarPathFinderTest {
 
         final int expectedPathLength = 9;
 
-        pathFinderTest(width, height, startPoint, endPoint, obstacles, expectedPathLength);
+        pathFinderTest(width, height, startPoint, goalPoint, obstacles, expectedPathLength);
     }
+
+    /**
+     * 5x5の障害物ありの区域でのテスト
+     */
+    @Test
+    @DisplayName(value = "[サイズ5x5][障害あり][起点終点逆転なし][終点到達可]")
+    public void Size5x5_WithObstacles_() {
+        var width = 5;
+        var height = 5;
+        var startPoint = new Point(0, 0);
+        var goalPoint = new Point(4, 4);
+        var obstacles = Set.of(
+                new Point(0, 2),
+                new Point(1, 2),
+                new Point(2, 2),
+                new Point(3, 2),
+                new Point(3, 1)
+        );
+
+        final int expectedPathLength = 9;
+
+        pathFinderTest(width, height, startPoint, goalPoint, obstacles, expectedPathLength);
+    }
+
+    /**
+     * 5x5の障害物ありの区域でのテスト
+     */
+    @Test
+    @DisplayName(value = "[サイズ5x5][障害あり][起点終点逆転なし][終点到達可]")
+    public void Size5x5_WithObstacles__() {
+        var width = 5;
+        var height = 5;
+        var startPoint = new Point(0, 0);
+        var goalPoint = new Point(4, 4);
+        var obstacles = Set.of(
+                new Point(0, 1),
+                new Point(1, 1),
+                new Point(2, 1),
+                new Point(3, 1),
+                new Point(1, 3),
+                new Point(2, 3),
+                new Point(3, 3),
+                new Point(4, 3)
+        );
+
+        final int expectedPathLength = 17;
+
+        pathFinderTest(width, height, startPoint, goalPoint, obstacles, expectedPathLength);
+    }
+
+    /**
+     * 5x5の障害物ありの区域でのテスト
+     */
+    @Test
+    @DisplayName(value = "[サイズ5x5][障害あり][起点終点逆転なし][終点到達可]")
+    public void Size5x5_WithObstacles___() {
+        var width = 5;
+        var height = 5;
+        var startPoint = new Point(0, 0);
+        var goalPoint = new Point(4, 4);
+        var obstacles = Set.of(
+                new Point(0, 1),
+                new Point(1, 1),
+                //new Point(2, 1),
+                new Point(3, 1),
+                new Point(4, 1),
+                new Point(1, 3),
+                new Point(2, 3),
+                new Point(3, 3),
+                new Point(4, 3)
+        );
+
+        final int expectedPathLength = 13;
+
+        pathFinderTest(width, height, startPoint, goalPoint, obstacles, expectedPathLength);
+    }
+
 
     /**
      * 5x5の区域で、終点に辿りつけないテスト
@@ -73,7 +153,8 @@ public class AStarPathFinderTest {
     public void Size5x5_NoAccess() {
         var width = 5;
         var height = 5;
-        Point startPoint = new Point(0, 0), endPoint = new Point(4, 4);
+        var startPoint = new Point(0, 0);
+        var goalPoint = new Point(4, 4);
         var obstacles = Set.of(
                 new Point(3, 3),
                 new Point(3, 4),
@@ -82,7 +163,7 @@ public class AStarPathFinderTest {
 
         final int expectedPathLength = 0;
 
-        pathFinderTest(width, height, startPoint, endPoint, obstacles, expectedPathLength);
+        pathFinderTest(width, height, startPoint, goalPoint, obstacles, expectedPathLength);
     }
 
 
@@ -92,7 +173,7 @@ public class AStarPathFinderTest {
      * @param width              区域の幅
      * @param height             区域の高さ
      * @param startPoint         起点
-     * @param endPoint           終点
+     * @param goalPoint          終点
      * @param obstacles          障害物の位置の一覧
      * @param expectedPathLength 経路の長さ 終点にたどり着けない場合は0
      */
@@ -100,12 +181,13 @@ public class AStarPathFinderTest {
             int width,
             int height,
             Point startPoint,
-            Point endPoint,
+            Point goalPoint,
             Set<Point> obstacles,
             int expectedPathLength) {
         Point[] path = null;
         try {
-            path = AStarPathFinder.findPath(width, height, startPoint, endPoint, Optional.ofNullable(obstacles))
+            var finder = new AStarPathFinderNormalImpl();
+            path = finder.findPath(width, height, startPoint, goalPoint, Optional.ofNullable(obstacles))
                     .map(e -> e.toArray(Point[]::new))
                     .orElse(null);
         } catch (Exception e) {
@@ -120,6 +202,8 @@ public class AStarPathFinderTest {
             return;
         }
 
+        //Arrays.stream(path).map(Coordinate::toString).forEach(System.out::println);
+
         // 経路が最短かを確認します。
         Assertions.assertEquals(expectedPathLength, path.length);
 
@@ -129,10 +213,10 @@ public class AStarPathFinderTest {
 
         for (int index = 1; index < path.length; index++) {
             var currentPosition = path[index];
-            int currentPositionX = ((Double) currentPosition.getX()).intValue();
-            int currentPositionY = ((Double) currentPosition.getY()).intValue();
-            int distanceX = Math.abs(currentPositionX - ((Double) lastPosition.getX()).intValue());
-            int distanceY = Math.abs(currentPositionY - ((Double) lastPosition.getY()).intValue());
+            int currentPositionX = currentPosition.x;
+            int currentPositionY = currentPosition.y;
+            int distanceX = Math.abs(currentPositionX - lastPosition.x);
+            int distanceY = Math.abs(currentPositionY - lastPosition.y);
 
             if (obstacles != null) {
                 // 障害物のある所を通過していないかを確認します。
@@ -148,7 +232,7 @@ public class AStarPathFinderTest {
         }
 
         // 終点が入力情報と一致するかを確認します。
-        Assertions.assertEquals(endPoint, lastPosition);
+        Assertions.assertEquals(goalPoint, lastPosition);
     }
 
 }

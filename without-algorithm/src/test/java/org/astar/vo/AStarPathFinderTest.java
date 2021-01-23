@@ -1,4 +1,4 @@
-package org.astar;
+package org.astar.vo;
 
 
 import org.junit.jupiter.api.Assertions;

@@ -24,7 +24,7 @@ public class AStarPathFinderEcImpl {
     private CoordinateSystemEc coordinateSystemEc;
 
     /**
-     * 暫定的に探索済みの最短経路で無いと判定された経路(Node)を格納したリスト
+     * 次に最短経路であるか判定するノードのリスト
      */
     private MutableSet<ChainNodeEc> provisionalOpenSet = Sets.mutable.of();
 

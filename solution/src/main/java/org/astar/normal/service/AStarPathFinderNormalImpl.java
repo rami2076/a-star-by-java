@@ -18,7 +18,7 @@ public class AStarPathFinderNormalImpl {
     private Parameter parameter;
 
     /**
-     * 計算中のノードを格納したリスト
+     * 次に最短経路であるか判定するノードのリスト
      */
     private Set<ChainNodeNormal> openSet = new HashSet<>();
 

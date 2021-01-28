@@ -33,7 +33,6 @@ public class TesterPathFinder {
             Point endPoint,
             Optional<Set<Point>> obstacles) {
 
-        // TODO : ここで皆さんの経路探索ロジックを実装してください。
         return null;
     }
 }
